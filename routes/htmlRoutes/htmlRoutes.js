@@ -9,7 +9,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'notes.html'));
+    // Construct the correct path to notes.html
+    res.sendFile(path.join(__dirname, '../../public/notes.html'));
 });
 
 module.exports = router;

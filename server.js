@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3001;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Define routes
-app.use('/api', require('./routes/api')); 
-app.use(require('./routes/htmlRoutes')); 
+app.use('/api', require('./routes/api/apiRoutes')); 
+app.use(require('./routes/htmlRoutes/htmlRoutes')); 
 
 // Starts the server to begin listening
 app.listen(PORT, () => {
