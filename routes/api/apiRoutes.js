@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const path = require('path');
 
@@ -11,11 +12,15 @@ router.get('/notes', (req, res) => {
 });
 
 // POST route to add a new note
-router.post('/notes', (req, res) => {
+app.post('/notes', (req, res) => {
     const newNote = req.body;
+    const notes = readNotesFromFile();
+    newNote.id = Date.now().toString(); // Assign a unique id
     notes.push(newNote);
-    res.status(201).json(newNote);
+    writeNotesToFile(notes);
+    res.json(newNote);
 });
+
 
 // DELETE route to delete a note
 router.delete('/notes/:id', (req, res) => {
