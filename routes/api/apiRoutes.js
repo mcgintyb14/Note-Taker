@@ -1,32 +1,59 @@
 const express = require('express');
-const app = express();
 const router = express.Router();
+const fs = require('fs');
 const path = require('path');
 
-// Example data - you can replace this with your actual data handling logic
+const notesFilePath = path.join(__dirname, '../../db/db.json');
+
+const readNotesFromFile = () => {
+    try {
+        const data = fs.readFileSync(notesFilePath);
+        return JSON.parse(data);
+    } catch (error) {
+        // Handle file not found or invalid JSON
+        console.error('Error reading notes from file:', error);
+        return [];
+    }
+};
+
+const writeNotesToFile = (notes) => {
+    fs.writeFileSync(notesFilePath, JSON.stringify(notes, null, 2));
+};
+
 let notes = [];
 
-// GET route to fetch all notes
 router.get('/notes', (req, res) => {
-    res.json(notes);
+    try {
+        const notes = readNotesFromFile();
+        res.json(notes);
+    } catch (error) {
+        console.error('Error reading notes:', error);
+        res.status(500).json({ error: 'Error reading notes' });
+    }
 });
 
-// POST route to add a new note
-app.post('/notes', (req, res) => {
-    const newNote = req.body;
-    const notes = readNotesFromFile();
-    newNote.id = Date.now().toString(); // Assign a unique id
-    notes.push(newNote);
-    writeNotesToFile(notes);
-    res.json(newNote);
+router.post('/notes', (req, res) => {
+    try {
+        const newNote = req.body;
+        notes.push(newNote);
+        writeNotesToFile(notes);
+        res.json(newNote);
+    } catch (error) {
+        console.error('Error adding note:', error);
+        res.status(500).json({ error: 'Error adding note' });
+    }
 });
 
-
-// DELETE route to delete a note
-router.delete('/notes/:id', (req, res) => {
-    const noteId = req.params.id;
-    notes = notes.filter(note => note.id !== noteId);
-    res.status(204).end();
+router.delete('/:id', (req, res) => {
+    try {
+        const noteId = req.params.id;
+        notes = notes.filter(note => note.id !== noteId);
+        writeNotesToFile(notes);
+        res.status(204).end();
+    } catch (error) {
+        console.error('Error deleting note:', error);
+        res.status(500).json({ error: 'Error deleting note' });
+    }
 });
 
 module.exports = router;
