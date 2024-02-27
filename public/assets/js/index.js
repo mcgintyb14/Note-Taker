@@ -15,7 +15,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 notes.forEach(note => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-group-item');
-                    listItem.textContent = note.title;
+                    
+                    // Create a heading element for the title
+                    const titleElement = document.createElement('h5');
+                    titleElement.textContent = note.title;
+                    listItem.appendChild(titleElement);
+    
+                    // Create a paragraph element for the text
+                    const textElement = document.createElement('p');
+                    textElement.textContent = note.text;
+                    listItem.appendChild(textElement);
+    
                     listGroup.appendChild(listItem);
                 });
             })
@@ -65,8 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(savedNote => {
             // Do something with the response data if needed
             console.log('Note saved successfully:', savedNote);
-            
-            // Optionally, you can update the UI or perform other actions here
+
+            noteTitleInput.value = '';
+            noteTextInput.value = '';
+    
+            // Fetch and display notes again to update the UI
+            fetchAndDisplayNotes();
         })
         .catch(error => {
             console.error('Error saving note:', error);

@@ -3,6 +3,8 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
+router.use(express.json());
+
 const notesFilePath = path.join(__dirname, '../../db/db.json');
 
 const readNotesFromFile = () => {
@@ -35,6 +37,7 @@ router.get('/notes', (req, res) => {
 router.post('/notes', (req, res) => {
     try {
         const newNote = req.body;
+        const notes = readNotesFromFile();
         notes.push(newNote);
         writeNotesToFile(notes);
         res.json(newNote);
