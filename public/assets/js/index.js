@@ -6,7 +6,7 @@ const noteTextInput = document.querySelector('.note-textarea');
 const listGroup = document.querySelector('.list-group');
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Get references to HTML elements
+    // Function to fetch and display notes
     const fetchAndDisplayNotes = () => {
         fetch('/api/notes')
             .then(response => response.json())
@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const deleteButton = document.createElement('button');
                     deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'delete-note');
                     deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-                    deleteButton.addEventListener('click', () => deleteNote(note.id));
+                    deleteButton.setAttribute('data-note-id', note.id); // Set the note ID as a data attribute
+                    deleteButton.addEventListener('click', deleteNote);
                     listItem.appendChild(deleteButton);
     
                     listGroup.appendChild(listItem);
@@ -96,7 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Function to handle note deletion
-    function deleteNote(noteId) {
+    function deleteNote() {
+        const noteId = this.getAttribute('data-note-id'); // Get the note ID from the button
+        if (!noteId) {
+            console.error('Note ID is undefined or null');
+            return;
+        }
+    
         fetch(`/api/notes/${noteId}`, {
             method: 'DELETE'
         })
@@ -111,10 +118,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error deleting note:', error);
         });
     }
-});
 
-clearFormBtn.addEventListener('click', function(event) {
-    // Clear the content of the title and text fields
-    noteTitleInput.value = '';
-    noteTextInput.value = '';
+    // Add event listener for the Clear Form button
+    clearFormBtn.addEventListener('click', function(event) {
+        // Clear the content of the title and text fields
+        noteTitleInput.value = '';
+        noteTextInput.value = '';
+    });
 });
