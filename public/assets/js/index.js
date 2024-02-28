@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     textElement.textContent = note.text;
                     listItem.appendChild(textElement);
     
+                    // Create a delete button with a trash icon
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'delete-note');
+                    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteButton.addEventListener('click', () => deleteNote(note.id));
+                    listItem.appendChild(deleteButton);
+    
                     listGroup.appendChild(listItem);
                 });
             })
@@ -87,6 +94,23 @@ document.addEventListener('DOMContentLoaded', function() {
             // Handle any errors that occur during the fetch request
         });
     });
+
+    // Function to handle note deletion
+    function deleteNote(noteId) {
+        fetch(`/api/notes/${noteId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                fetchAndDisplayNotes(); // Refresh the notes list after deletion
+            } else {
+                throw new Error('Failed to delete note');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting note:', error);
+        });
+    }
 });
 
 clearFormBtn.addEventListener('click', function(event) {

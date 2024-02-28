@@ -47,10 +47,12 @@ router.post('/notes', (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/notes/:id', (req, res) => {
     try {
         const noteId = req.params.id;
+        // Filter out the note with the specified ID
         notes = notes.filter(note => note.id !== noteId);
+        // Write the updated notes to the file
         writeNotesToFile(notes);
         res.status(204).end();
     } catch (error) {
