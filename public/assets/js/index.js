@@ -150,9 +150,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener for the Clear Form button
-    clearFormBtn.addEventListener('click', function (event) {
-        // Clear the content of the title and text fields
-        noteTitleInput.value = '';
-        noteTextInput.value = '';
-    });
+// Add event listener for the Clear Form button
+clearFormBtn.addEventListener('click', function (event) {
+    // Clear the content of the title and text fields
+    noteTitleInput.value = '';
+    noteTextInput.value = '';
+
+    // Clear the displayed note details from the right-hand side of the page
+    const noteDetailsDiv = document.getElementById('note-details');
+    noteDetailsDiv.innerHTML = ''; // Clear the inner HTML content
+});
 });
