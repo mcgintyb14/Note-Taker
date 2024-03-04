@@ -34,13 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     deleteButton.addEventListener('click', deleteNote);
                     listItem.appendChild(deleteButton);
     
+                    // Log the created delete button's dataset
+                    console.log('Delete Button Dataset:', deleteButton.dataset);
+    
                     listGroup.appendChild(listItem);
                 });
             })
             .catch(error => {
                 console.error('Error fetching notes:', error);
             });
-    };
+    };    
 
     // Call fetchAndDisplayNotes when the page loads
     fetchAndDisplayNotes();
@@ -96,28 +99,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Function to handle note deletion
-    function deleteNote() {
-        const noteId = this.getAttribute('data-note-id'); // Get the note ID from the button
-        if (!noteId) {
-            console.error('Note ID is undefined or null');
-            return;
-        }
-    
-        fetch(`/api/notes/${noteId}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (response.ok) {
-                fetchAndDisplayNotes(); // Refresh the notes list after deletion
-            } else {
-                throw new Error('Failed to delete note');
-            }
-        })
-        .catch(error => {
-            console.error('Error deleting note:', error);
-        });
+// Function to handle note deletion
+
+function deleteNote() {
+    const noteId = this.dataset.noteId; // Get the note ID from the button's dataset
+    console.log('Note ID:', noteId); // Check the value of the note ID
+    if (!noteId) {
+        console.error('Note ID is undefined or null');
+        return;
     }
+
+    fetch(`/api/notes/${noteId}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            fetchAndDisplayNotes(); // Refresh the notes list after deletion
+        } else {
+            throw new Error('Failed to delete note');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting note:', error);
+    });
+}
+
+
 
     // Add event listener for the Clear Form button
     clearFormBtn.addEventListener('click', function(event) {
