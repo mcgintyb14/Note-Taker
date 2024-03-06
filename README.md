@@ -1,5 +1,8 @@
 # Note-Taker
 
+## Deployed Link
+https://note-taker-9rv4.onrender.com/
+
 ## Description
 This note-taking application utilizes express.js and a full-stack of client and server-side code to allow you to dynamically generate, save, and delete notes to help schedule your day and / or week. The application is easy-to-use, and utilizes a custom API with routes to help you easily generate and manage notes and "to-do" activities. 
 
